@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.showroom._core.utils.ApiUtils;
 import org.example.showroom.member.dto.MemberRequestDTO;
 import org.example.showroom.member.dto.MemberResponseDTO;
+import org.example.showroom.member.dto.SignUpResponseDTO;
 import org.example.showroom.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +35,13 @@ public class MemberController {
     @Operation(summary = "회원 가입", description = "회원 가입을 처리합니다.")
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid @RequestBody MemberRequestDTO.signUpDTO requestDTO) {
+        // 서비스 메서드 호출
+        SignUpResponseDTO responseDTO = memberService.signUp(requestDTO);
 
-        memberService.signUp(requestDTO);
-
-        return ResponseEntity.ok().body(ApiUtils.success(null));
+        // 응답 생성
+        return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
     }
+
 
 
     /*
