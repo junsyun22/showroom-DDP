@@ -12,6 +12,7 @@ import org.example.showroom.member.domain.Gender;
 import org.example.showroom.member.domain.Member;
 import org.example.showroom.member.dto.MemberRequestDTO;
 import org.example.showroom.member.dto.MemberResponseDTO;
+import org.example.showroom.member.dto.SignUpResponseDTO;
 import org.example.showroom.member.repository.MemberRepository;
 import org.example.showroom.refreshToken.domain.RefreshToken;
 import org.example.showroom.refreshToken.repository.RefreshTokenRepository;
@@ -45,7 +46,7 @@ public class MemberService {
         기본 회원 가입
      */
     @Transactional
-    public void signUp(MemberRequestDTO.signUpDTO requestDTO) {
+    public SignUpResponseDTO signUp(MemberRequestDTO.signUpDTO requestDTO) {
 
 
 //        // 비밀번호 확인
@@ -56,6 +57,11 @@ public class MemberService {
 
         // 회원 저장
         memberRepository.save(member);
+
+        return SignUpResponseDTO.builder()
+                .userName(member.getName())
+                .userId(member.getEmail())
+                .build();
 
     }
 
