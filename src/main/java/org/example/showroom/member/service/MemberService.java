@@ -48,8 +48,8 @@ public class MemberService {
     public void signUp(MemberRequestDTO.signUpDTO requestDTO) {
 
 
-        // 비밀번호 확인
-        checkValidPassword(requestDTO.password(), passwordEncoder.encode(requestDTO.confirmPassword()));
+//        // 비밀번호 확인
+//        checkValidPassword(requestDTO.password(), passwordEncoder.encode(requestDTO.confirmPassword()));
 
         // 회원 생성
         Member member = newMember(requestDTO);
