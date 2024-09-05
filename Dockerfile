@@ -1,14 +1,14 @@
-# Use a base image with Java 17
+# Java 17 기반 이미지 사용
 FROM openjdk:17-jdk-slim
 
-# Set the working directory
+# 작업 디렉토리 설정
 WORKDIR /app
 
-# Copy the JAR file from the build context to the working directory
+# 빌드된 JAR 파일을 컨테이너로 복사
 COPY target/showroom-DDP-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the application's port
+# 포트 12450 노출
 EXPOSE 12450
 
-# Define the entry point for the Docker container
+# 애플리케이션 실행 명령어
 ENTRYPOINT ["java", "-jar", "app.jar"]

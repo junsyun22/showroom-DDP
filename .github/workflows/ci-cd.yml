@@ -1,7 +1,10 @@
-name: Build and Deploy Docker Image
+name: CI/CD Pipeline
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -10,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
@@ -21,12 +24,26 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Build Docker Image
-        run: docker build -t my-springboot-app:latest .
+      - name: Build Docker image
+        run: docker build -t showroom-ddp .
 
-      - name: Save Docker Image as Artifact
-        uses: actions/upload-artifact@v3
+      - name: Save Docker image to artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: showroom-DDP
-          path: |
-            **/my-springboot-app:latest
+          name: showroom-ddp
+          path: showroom-ddp.tar
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load Docker image and run
+        run: |
+          docker load -i showroom-ddp.tar
+          docker stop showroom-ddp || true
+          docker rm showroom-ddp || true
+          docker run -d -p 12450:12450 --name showroom-ddp showroom-ddp
