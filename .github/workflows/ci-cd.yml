@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Build Docker image
+        run: docker build -t showroom-ddp .
+
+      - name: Save Docker image to artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: showroom-ddp
+          path: showroom-ddp.tar
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Load Docker image and run
+        run: |
+          docker load -i showroom-ddp.tar
+          docker stop showroom-ddp || true
+          docker rm showroom-ddp || true
+          docker run -d -p 12450:12450 --name showroom-ddp showroom-ddp
