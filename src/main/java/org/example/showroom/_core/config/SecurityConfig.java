@@ -40,6 +40,7 @@ public class SecurityConfig {
     private final JWTTokenProvider jwtTokenProvider;
 
     private static final String[] WHITE_LIST = {
+            "/aitest",
             "/api/auth/**",
             "/v3/api-docs/**",       // Swagger 문서
             "/swagger-ui/**",        // Swagger UI
