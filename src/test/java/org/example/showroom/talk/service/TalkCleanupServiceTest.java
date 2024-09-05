@@ -53,7 +53,7 @@ public class TalkCleanupServiceTest {
         // 삭제 후 데이터 확인
         List<Talk> remainingTalks = talkRepository.findAll();
         assertThat(remainingTalks).hasSize(1);
-        assertThat(remainingTalks.get(0).getText()).isEqualTo("Recent message");
+        assertThat(remainingTalks.get(0).getQuestion()).isEqualTo("Recent message");
     }
 
     private void setField(Talk talk, String fieldName, LocalDateTime value) throws Exception {

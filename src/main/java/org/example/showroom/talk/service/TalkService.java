@@ -1,6 +1,6 @@
-
 package org.example.showroom.talk.service;
 
+import org.example.showroom.openfeign.AiConnection;
 import org.example.showroom.talk.dto.TalkRequestDto;
 import org.example.showroom.talk.dto.TalkResponseDto;
 import org.example.showroom.talk.entity.Talk;
@@ -8,6 +8,7 @@ import org.example.showroom.talk.repository.TalkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,14 +16,24 @@ import java.util.stream.Collectors;
 public class TalkService {
 
     private final TalkRepository talkRepository;
+    private final AiConnection aiConnection;
 
     @Autowired
-    public TalkService(TalkRepository talkRepository) {
+    public TalkService(TalkRepository talkRepository, AiConnection aiConnection) {
         this.talkRepository = talkRepository;
+        this.aiConnection = aiConnection;
     }
 
     public TalkResponseDto saveTalk(TalkRequestDto talkRequestDto) {
-        Talk talk = new Talk(talkRequestDto.getMemberId(), talkRequestDto.getText());
+        Talk talk = new Talk(
+                null,
+                talkRequestDto.getUserId(),
+                talkRequestDto.getQuestion(),
+                talkRequestDto.getAreaSize(),
+                talkRequestDto.getHousemateNum(),
+                LocalDateTime.now()
+        );
+
         Talk savedTalk = talkRepository.save(talk);
         return mapToResponseDto(savedTalk);
     }
@@ -40,8 +51,10 @@ public class TalkService {
     private TalkResponseDto mapToResponseDto(Talk talk) {
         TalkResponseDto responseDto = new TalkResponseDto();
         responseDto.setId(talk.getId());
-        responseDto.setMemberId(talk.getMemberId());
-        responseDto.setText(talk.getText());
+        responseDto.setUserId(talk.getMemberId());  // Corrected from setUserId to setMemberId
+        responseDto.setQuestion(talk.getQuestion());
+        responseDto.setAreaSize(talk.getAreaSize());
+        responseDto.setHousemateNum(talk.getHousemateNum());
         responseDto.setCreatedAt(talk.getCreatedAt());
         return responseDto;
     }
