@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,14 +23,12 @@ public class TalkCleanupServiceTest {
     private TalkRepository talkRepository;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         // 테스트 데이터 추가
-        Talk oldTalk = new Talk("user1", "Old message");
-        setField(oldTalk, "createdAt", LocalDateTime.now().minusWeeks(2)); // Reflection으로 필드 설정
+        Talk oldTalk = new Talk(1L, "Old message", "30평", "2명", LocalDateTime.now().minusWeeks(2));
         talkRepository.save(oldTalk);
 
-        Talk recentTalk = new Talk("user2", "Recent message");
-        setField(recentTalk, "createdAt", LocalDateTime.now());
+        Talk recentTalk = new Talk(2L, "Recent message", "25평", "3명", LocalDateTime.now());
         talkRepository.save(recentTalk);
     }
 
@@ -54,11 +51,5 @@ public class TalkCleanupServiceTest {
         List<Talk> remainingTalks = talkRepository.findAll();
         assertThat(remainingTalks).hasSize(1);
         assertThat(remainingTalks.get(0).getQuestion()).isEqualTo("Recent message");
-    }
-
-    private void setField(Talk talk, String fieldName, LocalDateTime value) throws Exception {
-        Field field = Talk.class.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(talk, value);
     }
 }

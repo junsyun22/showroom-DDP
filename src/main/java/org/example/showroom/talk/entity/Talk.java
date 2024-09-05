@@ -1,6 +1,5 @@
 package org.example.showroom.talk.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,22 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Talk {
 
-
-    public Talk(Long id, String memberId, String question, String areaSize, String housemateNum,LocalDateTime createdAt) {
-        this.id = id;
-        this.memberId = memberId;
-        this.question = question;
-        this.housemateNum = housemateNum;
-        this.areaSize = areaSize;
-        this.createdAt = createdAt;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String memberId;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
     @Column(nullable = false, length = 1000)
     private String question;
@@ -41,10 +30,7 @@ public class Talk {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-
-
-    // 테스트 전용 생성자 (권장하지 않음)
-    protected Talk(String memberId, String question, String areaSize ,String housemateNum ,LocalDateTime createdAt) {
+    public Talk(Long memberId, String question, String areaSize, String housemateNum, LocalDateTime createdAt) {
         this.memberId = memberId;
         this.question = question;
         this.areaSize = areaSize;
@@ -56,5 +42,4 @@ public class Talk {
     public void updateQuestion(String newQuestion) {
         this.question = newQuestion;
     }
-
 }
