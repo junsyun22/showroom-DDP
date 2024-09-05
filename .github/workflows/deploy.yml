@@ -1,0 +1,32 @@
+name: Build and Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Build Docker Image
+        run: docker build -t my-springboot-app:latest .
+
+      - name: Save Docker Image as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: showroom-DDP
+          path: |
+            **/my-springboot-app:latest
