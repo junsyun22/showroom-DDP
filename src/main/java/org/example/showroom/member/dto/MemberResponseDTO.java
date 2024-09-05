@@ -12,7 +12,13 @@ public class MemberResponseDTO {
             String accessToken,
             Long accessTokenValidTime,
             String refreshToken,
-            Long refreshTokenValidTime
+            Long refreshTokenValidTime,
+
+            @JsonProperty("userId")
+            String userId,
+
+            @JsonProperty("userName")
+            String userName
     ) {
     }
 
