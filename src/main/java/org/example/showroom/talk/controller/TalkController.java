@@ -31,10 +31,10 @@ public class TalkController {
         return ResponseEntity.ok(savedTalk);
     }
     @PostMapping("aitest")
-    public ChatAnswerDTO getTest5(@RequestBody TalkRequestDto talkRequestDto){
+    public TalkResponseDto getTest5(@RequestBody TalkRequestDto talkRequestDto){
         System.out.println(talkRequestDto);
 
-        ChatAnswerDTO answer = aiConnection.postSomeData(talkRequestDto);
+        TalkResponseDto answer = aiConnection.postSomeData(talkRequestDto);
         System.out.println(answer);
         return answer;
     }
