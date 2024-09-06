@@ -5,7 +5,9 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 빌드된 JAR 파일을 컨테이너로 복사
-COPY target/showroom-DDP-0.0.1-SNAPSHOT.jar app.jar
+#COPY target/showroom-DDP-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/showroom-0.0.1-SNAPSHOT.jar app.jar
+
 
 # 포트 12450 노출
 EXPOSE 12450
