@@ -1,5 +1,6 @@
 package org.example.showroom.openfeign;
 
+import org.example.showroom.talk.dto.TalkRequestDto;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +15,10 @@ public class TestController {
     }
 
     @PostMapping("aitest")
-    public ChatAnswerDTO getTest5(@RequestBody ChatQuestDTO chatQuest){
-        System.out.println(chatQuest);
+    public ChatAnswerDTO getTest5(@RequestBody TalkRequestDto talkRequestDto){
+        System.out.println(talkRequestDto);
 
-        ChatAnswerDTO answer = aiConnection.postSomeData(chatQuest);
+        ChatAnswerDTO answer = aiConnection.postSomeData(talkRequestDto);
         System.out.println(answer);
         return answer;
     }
