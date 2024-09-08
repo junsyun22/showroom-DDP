@@ -23,8 +23,6 @@ public class MemberRequestDTO {
             @JsonProperty("userPassword")
             String password,
 
-            String gender,
-
             @NotNull(message = "거주 평수를 입력해 주세요.")
             @JsonProperty("userArea")
             Integer userArea,

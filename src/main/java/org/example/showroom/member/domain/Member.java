@@ -29,10 +29,6 @@ public class Member extends BaseTimeEntity {
     @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'USER'")
     private Authority authority;
@@ -47,12 +43,11 @@ public class Member extends BaseTimeEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public Member(Long id, String name, String email, String password, Gender gender, Authority authority, int userArea, int userFamily, LocalDateTime createdAt) {
+    public Member(Long id, String name, String email, String password, Authority authority, int userArea, int userFamily, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.gender = gender;
         this.authority = authority;
         this.userArea = userArea;
         this.userFamily = userFamily;

@@ -102,7 +102,6 @@ public class MemberService {
                 .name(requestDTO.name())
                 .email(requestDTO.email())
                 .password(passwordEncoder.encode(requestDTO.password()))
-                .gender(Gender.fromString(requestDTO.gender()))
                 .authority(Authority.USER)
                 .userArea(requestDTO.userArea())
                 .userFamily(requestDTO.userFamily())
