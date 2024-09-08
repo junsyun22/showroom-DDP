@@ -7,7 +7,7 @@ import lombok.Data;
 public class TalkRequestDto {
 
     @JsonProperty("member_id")
-    private String memberId;  // userId 대신 memberId로 변경
+    private String memberId;
 
     private String question;
 
