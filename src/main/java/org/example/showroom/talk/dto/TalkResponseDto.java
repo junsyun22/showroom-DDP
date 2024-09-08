@@ -9,8 +9,8 @@ public class TalkResponseDto {
 
     private Long id;
 
-    @JsonProperty("member_id")
-    private Long memberId;  // Member의 ID
+    @JsonProperty("userId")
+    private String userId;  // Member의 userId
 
     private String memberName;  // Member의 이름 추가
 

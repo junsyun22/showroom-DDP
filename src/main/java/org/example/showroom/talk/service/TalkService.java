@@ -33,7 +33,7 @@ public class TalkService {
 
         // Talk 객체 생성 시 member 정보를 사용
         Talk talk = new Talk(
-                member.getId(),  // member의 ID를 사용
+                member.getEmail(),  // member의 ID를 사용
                 talkRequestDto.getQuestion(),
                 talkRequestDto.getAreaSize(),
                 talkRequestDto.getHousemateNum(),
@@ -57,12 +57,12 @@ public class TalkService {
     }
 
     private TalkResponseDto mapToResponseDtoWithMember(Talk talk) {
-        Optional<Member> memberOptional = memberRepository.findById(talk.getMemberId());
+        Optional<Member> memberOptional = memberRepository.findByEmail(talk.getUserId());
         Member member = memberOptional.orElse(null);
 
         TalkResponseDto responseDto = new TalkResponseDto();
         responseDto.setId(talk.getId());
-        responseDto.setMemberId(talk.getMemberId());
+        responseDto.setUserId(talk.getUserId());
         responseDto.setMemberName(member != null ? member.getName() : "Unknown"); // Member 이름 추가
         responseDto.setQuestion(talk.getQuestion());
         responseDto.setAreaSize(talk.getAreaSize());
