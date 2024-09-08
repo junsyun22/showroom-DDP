@@ -36,3 +36,9 @@ application.yml
 
 ### VS Code ###
 .vscode/
+
+
+### ci/cd ###
+docker-compose.yml
+Dockerfile
+my.cnf

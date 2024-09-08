@@ -45,19 +45,8 @@ public class JWTTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public MemberResponseDTO.authTokenDTO generateToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
 
-        if (authorities.isEmpty()) {
-            throw new RuntimeException("권한 정보가 없는 토큰을 생성할 수 없습니다.");
-        }
-
-        return generateToken(authentication.getName(), authentication.getAuthorities());
-    }
-
-    public MemberResponseDTO.authTokenDTO generateToken(String name, Collection<? extends GrantedAuthority> grantedAuthorities) {
+    public MemberResponseDTO.authTokenDTO generateToken(String userId, String name, Collection<? extends GrantedAuthority> grantedAuthorities) {
         // 권한 확인
         String authorities = grantedAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -68,11 +57,13 @@ public class JWTTokenProvider {
 
         // Access 토큰 제작
         String accessToken = Jwts.builder()
-                // 아이디 주입
-                .setSubject(name)
-                // 권한 주입
+                // 사용자 ID 주입
+                .setSubject(userId)
+                // 권한 및 추가 클레임 정보 주입
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(CLAIM_TYPE, TYPE_ACCESS)
+                .claim("userName", name)
+                .claim("userId", userId)
                 // 토큰 발행 시간 정보
                 .setIssuedAt(now)
                 // 만료시간 주입
@@ -89,8 +80,18 @@ public class JWTTokenProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
-        return new MemberResponseDTO.authTokenDTO(BEARER_TYPE, accessToken, ACCESS_TOKEN_LIFETIME, refreshToken, REFRESH_TOKEN_LIFETIME);
+        // authTokenDTO 생성 시 userId와 userName 추가
+        return new MemberResponseDTO.authTokenDTO(
+                BEARER_TYPE,
+                accessToken,
+                ACCESS_TOKEN_LIFETIME,
+                refreshToken,
+                REFRESH_TOKEN_LIFETIME,
+                userId,
+                name
+        );
     }
+
 
     public boolean validateToken(String token) {
         try {
