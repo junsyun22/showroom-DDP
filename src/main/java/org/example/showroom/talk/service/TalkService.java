@@ -26,9 +26,14 @@ public class TalkService {
         this.memberRepository = memberRepository;
     }
 
-    public TalkResponseDto saveTalk(TalkRequestDto talkRequestDto) {
+    public TalkResponseDto saveTalk(TalkRequestDto talkRequestDto, String email) {
+        // email을 사용하여 데이터베이스에서 해당 사용자를 조회
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Talk 객체 생성 시 member 정보를 사용
         Talk talk = new Talk(
-                talkRequestDto.getMemberId(),
+                member.getId(),  // member의 ID를 사용
                 talkRequestDto.getQuestion(),
                 talkRequestDto.getAreaSize(),
                 talkRequestDto.getHousemateNum(),
@@ -38,6 +43,7 @@ public class TalkService {
         Talk savedTalk = talkRepository.save(talk);
         return mapToResponseDtoWithMember(savedTalk);
     }
+
 
     public List<TalkResponseDto> getAllTalks() {
         List<Talk> talks = talkRepository.findAll();

@@ -40,6 +40,7 @@ public class SecurityConfig {
     private final JWTTokenProvider jwtTokenProvider;
 
     private static final String[] WHITE_LIST = {
+            "/api/talks/**",
             "/aitest",
             "/api/auth/**",
             "/v3/api-docs/**",       // Swagger 문서
@@ -75,8 +76,8 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> {
                     exception.authenticationEntryPoint(authenticationEntryPoint());
                     exception.accessDeniedHandler(accessDeniedHandler());
-                });
-//                .addFilterBefore(new JWTTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                })
+                .addFilterBefore(new JWTTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
