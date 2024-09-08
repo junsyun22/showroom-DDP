@@ -1,16 +1,15 @@
-# Java 17 기반 이미지 사용
-FROM openjdk:17-jdk-slim
+# 베이스 이미지로 OpenJDK 17 사용
+FROM eclipse-temurin:17 as jre-build
 
-# 작업 디렉토리 설정
-WORKDIR /app
+# 작업 디렉터리 설정
 
-# 빌드된 JAR 파일을 컨테이너로 복사
-#COPY target/showroom-DDP-0.0.1-SNAPSHOT.jar app.jar
-COPY build/libs/showroom-0.0.1-SNAPSHOT.jar app.jar
+RUN mkdir /opt/app
+# 프로젝트의 jar 파일을 Docker 컨테이너 안으로 복사
+COPY build/libs/showroom-0.0.1-SNAPSHOT.jar /opt/app/app.jar
 
+# 컨테이너에서 실행될 명령어 설정
 
-# 포트 12450 노출
+# 외부에 노출할 포트 설정 (docker-compose.yml에서 매핑할 포트)
 EXPOSE 12450
 
-# 애플리케이션 실행 명령어
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","/opt/app/app.jar"]
