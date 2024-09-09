@@ -16,10 +16,10 @@ public class TestController {
     }
 
     @PostMapping("aitest")
-    public TalkResponseDto getTest5(@RequestBody TalkRequestDto talkRequestDto){
-        System.out.println(talkRequestDto);
+    public TalkResponseDto getTest5(@RequestBody ChatQuestDTO chatQuestDTO){
+        System.out.println(chatQuestDTO);
 
-        TalkResponseDto answer = aiConnection.postSomeData(talkRequestDto);
+        TalkResponseDto answer = aiConnection.postSomeData(chatQuestDTO);
         System.out.println(answer);
         return answer;
     }

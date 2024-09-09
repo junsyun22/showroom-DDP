@@ -61,10 +61,9 @@ public class TalkService {
         Member member = memberOptional.orElse(null);
 
         TalkResponseDto responseDto = new TalkResponseDto();
-        responseDto.setId(talk.getId());
         responseDto.setUserId(talk.getUserId());
-        responseDto.setMemberName(member != null ? member.getName() : "Unknown"); // Member 이름 추가
-        responseDto.setQuestion(talk.getQuestion());
+//        responseDto.setMemberName(member != null ? member.getName() : "Unknown"); // Member 이름 추가
+        responseDto.setAnswer(talk.getQuestion());
         responseDto.setAreaSize(talk.getAreaSize());
         responseDto.setHousemateNum(talk.getHousemateNum());
         responseDto.setCreatedAt(talk.getCreatedAt());
