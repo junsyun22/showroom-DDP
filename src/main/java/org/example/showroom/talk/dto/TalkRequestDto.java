@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class TalkRequestDto {
 
-    @JsonProperty("member_id")
+    @JsonProperty("user_id")
     private String memberId;
 
     private String question;

@@ -6,21 +6,14 @@ import java.time.LocalDateTime;
 
 @Data
 public class TalkResponseDto {
-
     private Long id;
-
     @JsonProperty("userId")
-    private String userId;  // Member의 userId
-
-    private String memberName;  // Member의 이름 추가
-
-    private String question;
-
+    private String userId;  // Member's userId
+    private String memberName;
+    private String answer;
     @JsonProperty("area_size")
     private String areaSize;
-
     @JsonProperty("housemate_num")
     private String housemateNum;
-
     private LocalDateTime createdAt;
 }

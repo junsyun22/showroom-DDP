@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.showroom._core.error.ErrorCode;
 import org.example.showroom._core.jwt.JWTTokenFilter;
 import org.example.showroom._core.jwt.JWTTokenProvider;
+import org.example.showroom._core.utils.CustomUserDetail;
+import org.example.showroom._core.utils.CustomUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -37,6 +39,8 @@ import java.util.stream.Stream;
 public class SecurityConfig {
 
     private final JWTTokenProvider jwtTokenProvider;
+    private final CustomUserDetail customUserDetail;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
     private static final String[] WHITE_LIST = {
             "/api/talks/**",
@@ -51,6 +55,15 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+//        return http.getSharedObject(AuthenticationManagerBuilder.class)
+//                .userDetailsService(customUserDetail)
+//                .passwordEncoder(passwordEncoder)
+//                .and()
+//                .build();
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -76,7 +89,8 @@ public class SecurityConfig {
                     exception.authenticationEntryPoint(authenticationEntryPoint());
                     exception.accessDeniedHandler(accessDeniedHandler());
                 })
-                .addFilterBefore(new JWTTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .userDetailsService(customUserDetail);  // CustomUserDetail 서비스 추가
 
         return httpSecurity.build();
     }
