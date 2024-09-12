@@ -1,6 +1,7 @@
 package org.example.showroom.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ public class MemberRequestDTO {
             @JsonProperty("userId")
             String email,
 
-            @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "패스워드는 최소 6자 이상이어야 하며, 숫자를 포함해야 합니다.")
+            @Schema(description = "패스워드", defaultValue = "1234")
             @JsonProperty("userPassword")
             String password,
 
