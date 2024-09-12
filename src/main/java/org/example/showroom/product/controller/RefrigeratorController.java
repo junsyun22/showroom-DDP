@@ -1,18 +1,23 @@
 package org.example.showroom.product.controller;
+
+// RefrigeratorController.java
 import org.example.showroom.product.dto.RefrigeratorDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/refrigerators")
 public class RefrigeratorController {
 
     @GetMapping
-    public List<RefrigeratorDto> getRefrigerators() {
-        return Arrays.asList(
+    public ResponseEntity<List<RefrigeratorDto>> getRefrigerators() {
+        List<RefrigeratorDto> refrigerators = Arrays.asList(
                 new RefrigeratorDto("BESPOKE 냉장고 4도어 902L", "BESPOKE 냉장고 4도어",
                         "프리스탠딩", "912×1830×922 mm", 149, 902,
                         536, 366, "1등급", 44.4),
@@ -26,5 +31,8 @@ public class RefrigeratorController {
                         "프리스탠딩", "910×1820×920 mm", 140, 820,
                         510, 310, "2등급", 42.0)
         );
+
+        // 상태 코드 200 (OK)와 함께 리스트를 ResponseEntity로 감싸서 반환
+        return new ResponseEntity<>(refrigerators, HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.showroom.product.dto;
 
+// RefrigeratorDTO.java
 public class RefrigeratorDto {
     private String productName;
     private String productType;
