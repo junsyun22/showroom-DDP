@@ -15,8 +15,8 @@ public class Talk {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    @Column(name = "userId", nullable = false)
+    private String userId;
 
     @Column(nullable = false, length = 1000)
     private String question;
@@ -30,8 +30,8 @@ public class Talk {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Talk(Long memberId, String question, String areaSize, String housemateNum, LocalDateTime createdAt) {
-        this.memberId = memberId;
+    public Talk(String userId, String question, String areaSize, String housemateNum, LocalDateTime createdAt) {
+        this.userId = userId;
         this.question = question;
         this.areaSize = areaSize;
         this.housemateNum = housemateNum;
