@@ -37,6 +37,7 @@ application.yml
 ### VS Code ###
 .vscode/
 
+mysql_data/
 
 ### ci/cd ###
 docker-compose.yml
