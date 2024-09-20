@@ -1,6 +1,7 @@
 package org.example.showroom.product.dto;
 
 import lombok.Data;
+import org.example.showroom.product.entity.Refrigerator;
 
 // RefrigeratorDTO.java
 @Data
@@ -16,20 +17,34 @@ public class RefrigeratorDto {
     private String energyEfficiencyRating;// 소비 효율 등급
     private double powerConsumption; // 소비전력
 
-    public RefrigeratorDto(String productName, String productType, String installationType,
-                           String dimensions, double weight, int totalCapacity,
-                           int fridgeCapacity, int freezerCapacity,
-                           String energyEfficiencyRating, double powerConsumption) {
-        this.productName = productName;
-        this.productType = productType;
-        this.installationType = installationType;
-        this.dimensions = dimensions;
-        this.weight = weight;
-        this.totalCapacity = totalCapacity;
-        this.fridgeCapacity = fridgeCapacity;
-        this.freezerCapacity = freezerCapacity;
-        this.energyEfficiencyRating = energyEfficiencyRating;
-        this.powerConsumption = powerConsumption;
+    public Refrigerator toEntity() {
+        return new Refrigerator(
+                this.productName,
+                this.productType,
+                this.installationType,
+                this.dimensions,
+                this.weight,
+                this.totalCapacity,
+                this.fridgeCapacity,
+                this.freezerCapacity,
+                this.energyEfficiencyRating,
+                this.powerConsumption
+        );
+    }
+
+    public static RefrigeratorDto fromEntity(Refrigerator refrigerator) {
+        RefrigeratorDto dto = new RefrigeratorDto();
+        dto.setProductName(refrigerator.getProductName());
+        dto.setProductType(refrigerator.getProductType());
+        dto.setInstallationType(refrigerator.getInstallationType());
+        dto.setDimensions(refrigerator.getDimensions());
+        dto.setWeight(refrigerator.getWeight());
+        dto.setTotalCapacity(refrigerator.getTotalCapacity());
+        dto.setFridgeCapacity(refrigerator.getFridgeCapacity());
+        dto.setFreezerCapacity(refrigerator.getFreezerCapacity());
+        dto.setEnergyEfficiencyRating(refrigerator.getEnergyEfficiencyRating());
+        dto.setPowerConsumption(refrigerator.getPowerConsumption());
+        return dto;
     }
 
     // Getters 및 Setters
