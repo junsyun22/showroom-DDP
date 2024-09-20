@@ -1,7 +1,9 @@
 package org.example.showroom.product.controller;
 
 // RefrigeratorController.java
+import lombok.RequiredArgsConstructor;
 import org.example.showroom.product.dto.RefrigeratorDto;
+import org.example.showroom.product.service.RefrigeratorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/refrigerators")
+@RequiredArgsConstructor
 public class RefrigeratorController {
+    private final RefrigeratorService refrigeratorService;
 
     @GetMapping
     public ResponseEntity<List<RefrigeratorDto>> getRefrigerators() {
@@ -35,4 +39,11 @@ public class RefrigeratorController {
         // 상태 코드 200 (OK)와 함께 리스트를 ResponseEntity로 감싸서 반환
         return new ResponseEntity<>(refrigerators, HttpStatus.OK);
     }
+
+    @GetMapping("/fetch")
+    public ResponseEntity<List<RefrigeratorDto>> fetchRefrigerators() {
+        List<RefrigeratorDto> refrigerators = refrigeratorService.fetchRefrigeratorsFromAI();
+        return ResponseEntity.ok(refrigerators);
+    }
+
 }
