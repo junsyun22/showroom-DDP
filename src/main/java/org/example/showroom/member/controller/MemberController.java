@@ -34,9 +34,8 @@ public class MemberController {
        */
     @Operation(summary = "회원 가입", description = "회원 가입을 처리합니다.")
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody MemberRequestDTO.signUpDTO requestDTO) {
-        // 서비스 메서드 호출
-        SignUpResponseDTO responseDTO = memberService.signUp(requestDTO);
+    public ResponseEntity<?> signUp(@Valid @RequestBody MemberRequestDTO.signUpDTO requestDTO, HttpServletRequest request) {
+        SignUpResponseDTO responseDTO = memberService.signUp(requestDTO, request);
 
         // 응답 생성
         return ResponseEntity.ok().body(ApiUtils.success(responseDTO));

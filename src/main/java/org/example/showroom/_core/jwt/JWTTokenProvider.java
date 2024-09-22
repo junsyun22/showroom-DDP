@@ -75,6 +75,8 @@ public class JWTTokenProvider {
         // Refresh 토큰 제작
         String refreshToken = Jwts.builder()
                 .claim(CLAIM_TYPE, TYPE_REFRESH)
+                .claim("userName", name)
+                .claim("userId", userId)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_LIFETIME))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -156,4 +158,14 @@ public class JWTTokenProvider {
 
         return null;
     }
+    public String getUserIdFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("userId", String.class);
+    }
+
+    public String getUserNameFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("userName", String.class);
+    }
+
 }
