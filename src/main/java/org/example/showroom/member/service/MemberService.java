@@ -7,6 +7,7 @@ import org.example.showroom._core.error.ApplicationException;
 import org.example.showroom._core.error.ErrorCode;
 import org.example.showroom._core.jwt.JWTTokenProvider;
 import org.example.showroom._core.utils.ClientUtils;
+import org.example.showroom.log.service.EventLogService;
 import org.example.showroom.member.domain.Authority;
 import org.example.showroom.member.domain.Gender;
 import org.example.showroom.member.domain.Member;
@@ -34,7 +35,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
+    private final EventLogService eventLogService;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -46,7 +47,7 @@ public class MemberService {
         기본 회원 가입
      */
     @Transactional
-    public SignUpResponseDTO signUp(MemberRequestDTO.signUpDTO requestDTO) {
+    public SignUpResponseDTO signUp(MemberRequestDTO.signUpDTO requestDTO, HttpServletRequest request) {
 
 
 //        // 비밀번호 확인
@@ -58,7 +59,11 @@ public class MemberService {
         // 회원 저장
         memberRepository.save(member);
 
-        log.info("회원 가입 성공: ID {}", member.getEmail());
+        String ipAddress = ClientUtils.getClientIp(request);
+
+        eventLogService.logEvent("회원가입", member.getEmail(), ipAddress);
+
+        log.info("회원 가입 성공: ID {} (IP: {})", member.getEmail(), ipAddress);
 
         return SignUpResponseDTO.builder()
                 .userName(member.getName())
@@ -92,6 +97,7 @@ public class MemberService {
         }
 
         log.info("로그인 성공: ID {} (IP: {})", requestDTO.email(), ipAddress);
+        eventLogService.logEvent("로그인", requestDTO.email(), ipAddress);
 
         return getAuthTokenDTO(requestDTO.email(), requestDTO.password(), httpServletRequest);
     }
@@ -199,6 +205,8 @@ public class MemberService {
 
         log.info("정상적인 토큰 재발급: ID {} (IP: {})", refreshToken.get().getUserName(), currentIp);
 
+        eventLogService.logEvent("토큰 재발급", refreshToken.get().getUserName(), currentIp);
+
         // 저장된 RefreshToken 정보를 기반으로 JWT Token 생성
         MemberResponseDTO.authTokenDTO authTokenDTO = jwtTokenProvider.generateToken(
                 String.valueOf(refreshToken.get().getId()),  // userId로 사용
@@ -224,21 +232,26 @@ public class MemberService {
 
         log.info("로그아웃 - Refresh Token 확인");
 
+        // 리프레시 토큰 확인
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
 
-        if(token == null || !jwtTokenProvider.validateToken(token)) {
+        if (token == null || !jwtTokenProvider.validateToken(token)) {
             throw new ApplicationException(ErrorCode.FAILED_VALIDATE__REFRESH_TOKEN);
         }
 
-        // RefreshToken 조회 및 null 체크
-        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
-                .orElseThrow(() -> {
-                    log.error("로그아웃 실패: Refresh Token 을 얻을 수 없습니다. (토큰: {}, IP: {})", token, ClientUtils.getClientIp(httpServletRequest));
-                    return new ApplicationException(ErrorCode.FAILED_GET_RERFRESH_TOKEN);
-                });
+        // 리프레시 토큰에서 userId와 userName 추출
+        String userId = jwtTokenProvider.getUserIdFromToken(token);
+        String userName = jwtTokenProvider.getUserNameFromToken(token);
 
-        refreshTokenRepository.delete(refreshToken);
+        log.info("로그아웃 시도: userId {} / userName {}", userId, userName);
 
-        log.info("로그아웃 성공: IDvv {} (IP: {})", refreshToken.getUserName(), ClientUtils.getClientIp(httpServletRequest));
+
+
+        // 로그아웃 성공 시 로그 저장
+        String ipAddress = ClientUtils.getClientIp(httpServletRequest);
+        eventLogService.logEvent("로그아웃", userId, ipAddress);
+
+        log.info("로그아웃 성공: userId {} / userName {} (IP: {})", userId, userName, ipAddress);
     }
+
 }
