@@ -30,7 +30,8 @@ public class TalkController {
     }
 
     @PostMapping
-    public ResponseEntity<TalkResponseDto> getTest5(@RequestBody ChatQuestDTO chatQuestDTO) {
+    public ResponseEntity<TalkResponseDto> getTest5(@RequestBody ChatQuestDTO chatQuestDTO,
+                                                    @AuthenticationPrincipal UserDetails userDetails) {
 
         try {
             // Clean the input strings to remove control characters
@@ -40,12 +41,14 @@ public class TalkController {
             chatQuestDTO.setHousemateNum(cleanString(chatQuestDTO.getHousemateNum()));
 
 
+            String email = userDetails.getUsername();
 
             // Call AI service and get the response
             TalkResponseDto aiResponse = aiConnection.postSomeData(chatQuestDTO);
 
             // Create a new TalkResponseDto with the AI response and user details
             TalkResponseDto responseDto = new TalkResponseDto();
+            responseDto.setUserId(email);
             responseDto.setAnswer(chatQuestDTO.getQuestion());
             responseDto.setAreaSize(chatQuestDTO.getAreaSize());
             responseDto.setHousemateNum(chatQuestDTO.getHousemateNum());
