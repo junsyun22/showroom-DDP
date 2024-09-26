@@ -7,6 +7,8 @@ import org.example.showroom.openfeign.ChatQuestDTO;
 import org.example.showroom.talk.dto.TalkRequestDto;
 import org.example.showroom.talk.dto.TalkResponseDto;
 import org.example.showroom.talk.service.TalkService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequestMapping("/api/talks")
 public class TalkController {
 
+    private static final Logger log = LoggerFactory.getLogger(TalkController.class);
     private final TalkService talkService;
     private final AiConnection aiConnection;
 
@@ -39,6 +42,7 @@ public class TalkController {
             chatQuestDTO.setQuestion(cleanString(chatQuestDTO.getQuestion()));
             chatQuestDTO.setAreaSize(cleanString(chatQuestDTO.getAreaSize()));
             chatQuestDTO.setHousemateNum(cleanString(chatQuestDTO.getHousemateNum()));
+            log.info("Get Question. userId: {}, question: {}", chatQuestDTO.getUserId(), chatQuestDTO.getQuestion());
 
 
             String email = userDetails.getUsername();
@@ -54,6 +58,7 @@ public class TalkController {
             responseDto.setHousemateNum(chatQuestDTO.getHousemateNum());
             // Set the AI's answer
             responseDto.setAnswer(aiResponse.getAnswer());
+            log.info("Get Answer. userId: {}, answer: {}",chatQuestDTO.getUserId(), aiResponse.getAnswer());
 
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
