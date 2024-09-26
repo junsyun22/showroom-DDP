@@ -33,4 +33,13 @@ public class EventLogService {
     public List<EventLog> getLogoutLogs() {
         return eventLogRepository.findByEventType("로그아웃");
     }
+
+    // AI 로그만 가져오기 (AI 질문, AI 응답, AI 요청 실패)
+    public List<EventLog> getAiLogs() {
+        return eventLogRepository.findByEventTypeIn(List.of("AI 질문", "AI 응답", "AI 요청 실패"));
+    }
+    public void logEventWithDetails(String eventType, String userEmail, String ipAddress, String question, String answer) {
+        EventLog log = new EventLog(eventType, userEmail, ipAddress, LocalDateTime.now(), question, answer);
+        eventLogRepository.save(log);
+    }
 }

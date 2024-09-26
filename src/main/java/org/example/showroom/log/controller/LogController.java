@@ -41,4 +41,9 @@ public class LogController {
         List<EventLog> logs = eventLogService.getLogoutLogs();
         return ResponseEntity.ok(logs);
     }
+    @GetMapping("/ai")
+    public ResponseEntity<List<EventLog>> getAiLogs() {
+        List<EventLog> logs = eventLogService.getAiLogs();
+        return ResponseEntity.ok(logs);
+    }
 }
